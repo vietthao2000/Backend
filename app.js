@@ -1,53 +1,78 @@
 const fs = require('fs');
+//dung express
 const express = require('express');
+const bodyParser = require('body-parser');
+
+const imagesController = require(__dirname + '/modules/images/imagesController');
 
 var app = express();
 
-getJSON = (fileName) => {
-	var data = fs.readFileSync(fileName,'utf-8');
-	var json = JSON.parse(data);
-	return json;
-}
-
+//set public folder public
+//app.use(urlencoded)
 app.use(express.static(__dirname + '/public'));
+//parse json
+app.use(bodyParser.json({extends: true}));
+//parse urlencoded body
+app.use(bodyParser.urlencoded({extends: true}));
 
-app.get('/image/get', (req , res) => {
-	json = getJSON('imageData.json');
-	var html = "<html><head><title>All images</title></head><body>";
-
-	json.forEach( function(element, index) {
-		var div = "<div>";
-		var name = "<b>Name: </b>"+element.name+"</br>";
-		var img = "<img src='"+element.link+"'/></br>";
-		var description = "<b>Description: </b>"+element.description+"</br>";
-		div += name + description +img + "</div>";
-		console.log(div);
-		html += div;
-	});
-
-	html += "</body></html>";
-	res.send(html);
+app.get('/', (req, res) => {
+  res.send('./public/addImage.html');
 });
 
-app.get('/image/add', (req, res) => {
-	if (req.query && req.query.name && req.query.link && req.query.description) {
-		json = getJSON('imageData.json');
+app.post('/image', (req, res) => {
+  //doc du lieu tu file imageData
+  var imageInfoCollection = imagesController.fetchImageCollection();
 
-		image = {
-			name: req.query.name,
-			link: req.query.link,
-			description: req.query.description
-		}
+  //khai bao object
+  var imageInfo = {
+    name : req.body.name,
+    imageLink : req.body.imageLink,
+    description : req.body.description
+  }
 
-		json.push(image);
+  //push data moi vao collection
+  imageInfoCollection.push(imageInfo);
 
-		fs.writeFileSync('imageData.json',JSON.stringify(json));
-		res.send('Success');
-		return;
+  //luu lai vao file
+  imagesController.saveImageCollection(imageInfoCollection);
+  //bao thanh cong
+  res.send('Success');
+})
+
+app.get('/image', (req,res) => {
+	//console.log(req.query.id);
+	if (req.query.id) 
+	{
+		id = req.query.id;
+	  imageInfoCollection = imagesController.fetchImageCollection();
+	  if (imageInfoCollection[id-1]) {
+	  	data = imageInfoCollection[id-1];
+	  	htmlString = `<label>Current image id: ${id}</label><div>${data.name}</div><img src="${data.imageLink}"><div>${data.description}</div>`;
+	  }
+	  else htmlString = `Can't find image with id <b>${id}</b> in database. Max <b>${imageInfoCollection.length}</b>`;
 	}
-	res.send('Not enough query data');
+	else {
+		htmlString = 
+		`
+			<form method="GET" action="/image">
+				<label>Image id to get: </label>
+				<input type="number" name="id">
+				<input type="submit" value="Get image">
+			</form>
+		`;
+	}
+  res.send(htmlString);
 });
 
+app.put('/image', (req, res) => {
+
+});
+
+app.delete('/image', (req, res) => {
+
+});
+
+//mo 1 cai port de chay local
 app.listen(6969, (req, res) => {
-	console.log('Listening on port 6969');
+  console.log('app listen on 6969');
 });
