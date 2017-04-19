@@ -65,11 +65,36 @@ app.get('/image', (req,res) => {
 });
 
 app.put('/image', (req, res) => {
-
+	if (req.body && req.body.id) {
+		var imageInfoCollection = imagesController.fetchImageCollection();
+		if (imageInfoCollection[req.body.id-1]) {
+			if (req.body.name) imageInfoCollection[req.body.id-1].name = req.body.name;
+			if (req.body.imageLink) imageInfoCollection[req.body.id-1].imageLink = req.body.imageLink;	
+			if (req.body.description) imageInfoCollection[req.body.id-1].description = req.body.description;
+		};
+		imagesController.saveImageCollection(imageInfoCollection);
+		res.send("Success");
+	}
+	else {
+		res.send("Not enough data provided");
+	}
 });
 
 app.delete('/image', (req, res) => {
-
+	if (req.query && req.query.id) {
+		var imageInfoCollection = imagesController.fetchImageCollection();
+		if (imageInfoCollection[req.query.id-1]) {
+			imageInfoCollection.splice(req.query.id-1,1);
+			imagesController.saveImageCollection(imageInfoCollection);
+			res.send("Success");
+		}
+		else {
+			res.send(`Can't delete image with id <b>${req.query.id}</b>. Max <b>${imageInfoCollection.length}</b>`);
+		}
+	}
+	else {
+		res.send("Id not specified");
+	}
 });
 
 //mo 1 cai port de chay local
