@@ -41,23 +41,35 @@ app.post('/image', (req, res) => {
 
 app.get('/image', (req,res) => {
 	//console.log(req.query.id);
-	if (req.query.id) 
+	var htmlString = "";
+	if (req.query.id && req.query.id==="all") {
+		imageInfoCollection = imagesController.fetchImageCollection();
+
+	  imageInfoCollection.forEach((data) => {
+	    htmlString += `<div>${data.name}</div><img src="${data.imageLink}"><div>${data.description}</div>`;
+	  });
+	}
+	else if (req.query.id) 
 	{
 		id = req.query.id;
 	  imageInfoCollection = imagesController.fetchImageCollection();
 	  if (imageInfoCollection[id-1]) {
 	  	data = imageInfoCollection[id-1];
-	  	htmlString = `<label>Current image id: ${id}</label><div>${data.name}</div><img src="${data.imageLink}"><div>${data.description}</div>`;
+	  	htmlString =`<label>Current image id: ${id}</label><div>${data.name}</div><img src="${data.imageLink}"><div>${data.description}</div>`;
 	  }
 	  else htmlString = `Can't find image with id <b>${id}</b> in database. Max <b>${imageInfoCollection.length}</b>`;
 	}
 	else {
-		htmlString = 
+		htmlString +=
 		`
 			<form method="GET" action="/image">
 				<label>Image id to get: </label>
 				<input type="number" name="id">
 				<input type="submit" value="Get image">
+			</form>
+			<form method="GET" action="/image">
+				<input type="text" name="id" value="all" hidden>
+				<input type="submit" value="Get all images">
 			</form>
 		`;
 	}
