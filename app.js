@@ -11,9 +11,9 @@ var app = express();
 //app.use(urlencoded)
 app.use(express.static(__dirname + '/public'));
 //parse json
-app.use(bodyParser.json({extends: true}));
+app.use(bodyParser.json({extended: true}));
 //parse urlencoded body
-app.use(bodyParser.urlencoded({extends: true}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
   res.send('./public/addImage.html');
@@ -77,6 +77,7 @@ app.get('/image', (req,res) => {
 });
 
 app.put('/image', (req, res) => {
+	console.log(req.body);
 	if (req.body && req.body.id) {
 		var imageInfoCollection = imagesController.fetchImageCollection();
 		if (imageInfoCollection[req.body.id-1]) {
