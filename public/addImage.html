@@ -3,26 +3,84 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" type="text/css" href="assets/css/stylesheet.css">
   </head>
   <body>
-    <form action="/image" method="post">
-      <!-- ten anh -->
-      <div>
-        <label>Ten anh</label>
-        <input type="text" name="name" />
-      </div>
-      <!--  link anh-->
-      <div>
-        <label>Link anh</label>
-        <input type="text" name="imageLink" />
-      </div>
-      <!--  noi dung buc anh -->
-      <div>
-        <label>Noi dung</label>
-        <input type="text" name="description" />
-      </div>
-      <input type="submit" />
-      
-    </form>
+    <table>
+      <form method="get" action="/image">
+        <tr>
+          <th colspan="2">Xem ảnh</th>
+        </tr>
+          <td>ID: </td>
+          <td><input type="number" name="id" /></td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" /></td>
+        </tr>
+      </form>
+    </table>
+
+    <table>
+      <form method="post" action="/image">
+        <tr>
+          <th colspan="2">Thêm ảnh</th>
+        </tr>
+        <tr>
+          <td>Name: </td>
+          <td><input type="text" name="name" /></td>
+        </tr>
+        <tr>
+          <td>Image link:</td>
+          <td><input type="text" name="imageLink" /></td>
+        </tr>
+        <tr>
+          <td>Description: </td>
+          <td><input type="text" name="description" /></td>
+        </tr>
+        <tr>
+          <td colspan="2"><input type="submit" /></td>
+        </tr>
+      </form>
+    </table>
+
+    <!--
+    <table>
+      <tr>
+        <th colspan="2">Sửa ảnh</th>
+      </tr>
+      <tr>
+        <td>ID: </td>
+        <td><input type="number" name="id" /></td>
+      </tr>
+      <tr>
+        <td>Name: </td>
+        <td><input type="text" name="name" /></td>
+      </tr>
+      <tr>
+        <td>Image link:</td>
+        <td><input type="text" name="imageLink" /></td>
+      </tr>
+      <tr>
+        <td>Description: </td>
+        <td><input type="text" name="description" /></td>
+      </tr>
+      <tr>
+        <td colspan="2"><input type="button" onclick="putImage();" /></td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <th colspan="2">Xóa ảnh</th>
+      </tr>
+        <td>ID: </td>
+        <td><input type="number" name="id" /></td>
+      </tr>
+      <tr>
+        <td colspan="2"><input type="submit" onclick="delImage();"/></td>
+      </tr>
+    </table>    
+    -->
+    
   </body>
 </html>
