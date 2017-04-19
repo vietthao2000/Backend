@@ -1,7 +1,11 @@
 var put = (url, form) => {
+	var id = parseInt(document.getElementById("putId").value);
+	var name = document.getElementById("putName").value;
+	var imageLink = document.getElementById("putImageLink").value;
+	var description = document.getElementById("putDescription").value;
 	fetch(url, {
 		method: "PUT",
-		body: new FormData(form)
+		body: JSON.stringify({"name":name, "imageLink":imageLink, "description":description, "id":id})
 	}).then(function(response) {
 		return response.text()
 	}).then(function(body) {
