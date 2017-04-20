@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "long",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -10,6 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "md5": "^2.2.1",
+    "mongoose": "^4.9.5",
+    "mongoose-auto-increment": "^5.0.1"
   }
 }
