@@ -1,29 +1,49 @@
 const imagesModel = require('./imagesModel');
 //const md5 = require('md5');
 
+var process = (work) => {
+  try {
+    return work.then((status) => {
+      if (status.ok && status.n && status.nModified) {
+        if (status.ok) return `Query success, ${status.n} row(s) found, ${status.nModified} row(s) affected`;
+        else return `Query failed`;      
+      }
+      return status;
+    });
+  }
+  catch (e) {
+    console.log(e);
+    return processError();
+  }
+}
+
+var processError = () => {
+  return new Promise(cb => cb("An error occured"));
+}
+
 var addLike = (id,likeBy) => {
 	return findLike(id, likeBy).then((result) => {
 		if (result.length===0) 
-			return imagesModel.update(
+			return process(imagesModel.update(
 		    {_id: id}, {$push: {likes: {likeBy: likeBy}}}
-		  );
-		else return removeLike(id,likeBy);
+		  ));
+		else return process(removeLike(id,likeBy));
 	});
 }
 
 var removeLike = (id,likeBy) => {
-  return imagesModel.update({_id: id},
+  return process(imagesModel.update({_id: id},
     {$pull: {likes: {likeBy: likeBy}}}
-  );
+  ));
 }
 
 var findLike = (id,likeBy) => {
-	return imagesModel.find({_id:id, "likes.likeBy": likeBy});
+	return process(imagesModel.find({_id:id, "likes.likeBy": likeBy}));
 }
 
 var addComment = (id,comment,commentBy) => {
   var commentTimestamp = Date.now();
-  return imagesModel.update(
+  return process(imagesModel.update(
     {_id: id},
     {
       $push: {
@@ -37,28 +57,28 @@ var addComment = (id,comment,commentBy) => {
 	      }
 	    }
     }
-  );
+  ));
 }
 
 
 var removeComment = (id,commentHash) => {
-  return imagesModel.update({_id: id},
+  return process(imagesModel.update({_id: id},
   	{$pull: {comments: {_id: commentHash}}}
   	//_id is faster
     //{$pull: {comments: {commentHash: commentHash}}}
-  );
+  ));
 }
 
 var increaseAllViewCount = () => {
-  return imagesModel.updateMany({}, {$inc: {views:1}});
+  return process(imagesModel.updateMany({}, {$inc: {views:1}}));
 }
 
 var increaseViewCountById = (id) => {
-  return imagesModel.update({_id: id}, {$inc: {views:1}});
+  return process(imagesModel.update({_id: id}, {$inc: {views:1}}));
 }
 
 var increaseViewCountByName = (name) => {
-  return imagesModel.updateMany({name: name}, {$inc: {views:1}});   
+  return process(imagesModel.updateMany({name: name}, {$inc: {views:1}}));   
 }
 
 module.exports = {

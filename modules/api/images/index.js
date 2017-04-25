@@ -14,6 +14,7 @@ Router.post('/', (req, res) => {
 
 		imagesController.addImage(imageInfo).then((result) => {res.send(result)});
 	} catch (e) {
+		res.send("An error occured");
 		console.log(e);
 	};
 });
@@ -34,6 +35,7 @@ Router.get('/', (req,res) => {
 			imagesController.fetchImageCollection().then((result) => {res.send(result)});
 		}
 	} catch (e) {
+		res.send("An error occured");
 		console.log(e);
 	};
 })
@@ -60,6 +62,7 @@ Router.put('/', (req, res) => {
 		}
 		else res.send("Not enough data");
 	} catch (e) {
+		res.send("An error occured");
 		console.log(e);
 	};
 })
@@ -70,6 +73,7 @@ Router.delete('/', (req, res) => {
 			imagesController.deleteImageCollectionById(req.body.id).then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch (e) {
+		res.send("An error occured");
 		console.log(e);
 	};
 });
@@ -81,6 +85,7 @@ Router.post('/like', (req, res) => {
 			.then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch(e) {
+		res.send("An error occured");
 		console.log(e);
 	}
 });
@@ -92,6 +97,7 @@ Router.delete('/like', (req, res) => {
 				.then((result) => {res.send(result)});
 		else res.send('Not enough data');
 	} catch (e) {
+		res.send("An error occured");
 		console.log(e);
 	}
 });
@@ -106,6 +112,7 @@ Router.post('/comment', (req, res) => {
 			).then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch(e) {
+		res.send("An error occured");
 		console.log(e);
 	}
 });
@@ -116,6 +123,7 @@ Router.delete('/comment', (req, res) => {
 			.then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch(e) {
+		res.send("An error occured");
 		console.log(e);
 	}
 });
