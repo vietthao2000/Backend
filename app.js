@@ -1,5 +1,3 @@
-console.log('Hello nodemon');
-
 const fs = require('fs');
 //dung cai thu vien express
 const express = require('express');
@@ -7,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const config = require('./config.json');
+mongoose.Promise = global.Promise;
 
 var app = express();
 
@@ -23,7 +22,10 @@ var connection = mongoose.connect(config.connectionString, (err) => {
 autoIncrement.initialize(connection);
 
 const imagesRouter = require(__dirname + '/modules/api/images/');
-app.use('/api/image', imagesRouter);
+app.use('/api/images', imagesRouter);
+
+const usersRouter = require(__dirname + '/modules/api/users');
+app.use('/api/users', usersRouter);
 
 //mo 1 cai port de chay local
 app.listen(config.port, (req, res) => {
