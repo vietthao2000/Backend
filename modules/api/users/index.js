@@ -22,13 +22,19 @@ Router.post('/login', (req, res) => {
 	}
 });
 
-// Router.get('/search', (req, res) => {
-// 	try {
-// 		let b = req.body;
-
-// 	} catch (e) {
-
-// 	}
-// });
+Router.get('/search', (req, res) => {
+	try {
+		let b = req.query;
+		if (b.q) {
+			usersController.search(b.q).then(result => res.send(result));
+		}
+		else {
+			res.send("Missing query");
+		}
+	} catch (e) {
+		res.send("An error occured");
+		console.log("search req err ", e);
+	}
+});
 
 module.exports = Router;

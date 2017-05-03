@@ -15,8 +15,8 @@ app.use(bodyParser.json({ extended : true}));
 app.use(bodyParser.urlencoded({extended: true}));
 
 var connection = mongoose.connect(config.connectionString, (err) => {
-  if (err) console.log(err)
-  else console.log("Connected");
+	if (err) console.log(err)
+	else console.log("Connected");
 });
 
 autoIncrement.initialize(connection);
@@ -29,5 +29,5 @@ app.use('/api/users', usersRouter);
 
 //mo 1 cai port de chay local
 app.listen(config.port, (req, res) => {
-  console.log(`app listen on ${config.port}`);
+	console.log(`app listen on ${config.port}`);
 })

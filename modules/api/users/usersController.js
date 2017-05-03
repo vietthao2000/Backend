@@ -1,6 +1,7 @@
 const usersModel = require("./usersModel");
 const md5 = require('md5');
 const validator = require('validator');
+const unidecode = require('unidecode');
 
 var process = (work) => {
 	try {
@@ -21,9 +22,10 @@ var process = (work) => {
 	}
 }
 
-// var format = (data) => {
-
-// }
+var normalize = (st) => {
+	st = unidecode(st);
+	return st.replace(/[^0-9a-zA-z]/g,"");
+}
 
 var register = (data) => {
 	if (data.password) data.password = md5(data.password);
@@ -52,11 +54,32 @@ var login = (data) => {
 	});
 }
 
-// var search = (query) => {
+var search = (q) => {
+	//This search works, but cause duplication. I'll fix it later
+	return new Promise(cb => {
+		var result = [];
+		searchByUserName(normalize(q)).then(r => {
+			if (r) r.forEach(element => {result.push(element)});
+			searchByName(q).then(r => {
+				if (r) r.forEach(element => {result.push(element)});
+				cb(result);
+			});
+		});
+	});
+}
 
-// }
+var searchByUserName = (q) => {
+	return process(usersModel.find({"username": {$regex: q, $options: "g"}}, "_id"))
+		.then(r => {return r});
+}
+
+var searchByName = (q) => {
+	return process(usersModel.find({"name": {$regex: q.replace(" ","|"), $options: "g"}}, "_id"))
+		.then(r => {return r});
+}
 
 module.exports = {
 	register,
-	login
+	login,
+	search
 }
