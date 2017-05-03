@@ -55,13 +55,12 @@ var login = (data) => {
 }
 
 var search = (q) => {
-	//This search works, but cause duplication. I'll fix it later
 	return new Promise(cb => {
 		var result = [];
 		searchByUserName(normalize(q)).then(r => {
-			if (r) r.forEach(element => {result.push(element)});
+			if (r) r.forEach(element => {result.push(element['_id'])});
 			searchByName(q).then(r => {
-				if (r) r.forEach(element => {result.push(element)});
+				if (r) r.forEach(element => {if (result.indexOf(element['_id'])===-1) result.push(element['_id'])});
 				cb(result);
 			});
 		});
