@@ -42,6 +42,8 @@ var usersModel = new Schema({
 	},
 	avatarLink: {type: String, default: ''},
 	bio: {type: String, default: ''},
+	created: {type: Date, default: Date.now()},
+	updated: {type: Date, default: Date.now()},
 	friends: [{
 		uid: {type: Number}
 	}],

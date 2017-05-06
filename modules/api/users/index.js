@@ -22,19 +22,32 @@ Router.post('/login', (req, res) => {
 	}
 });
 
-Router.get('/search', (req, res) => {
+Router.get('/', (req, res) => {
 	try {
 		let b = req.query;
-		if (b.q) {
-			usersController.search(b.q).then(result => res.send(result));
+		if (b.s) {
+			usersController.search(b.s).then(result => res.send(result));
+		}
+		else if (b.id) {
+			usersController.searchByUserId(b.id).then(result => res.send(result));
 		}
 		else {
-			res.send("Missing query");
+			usersController.getAllUsers().then(result => res.send(result));
 		}
 	} catch (e) {
 		res.send("An error occured");
 		console.log("search req err ", e);
 	}
 });
+
+Router.put('/', (req, res) => {
+	try {
+		let b = req.body;
+		usersController.update(req.body).then(result => res.send(result));
+	} catch (e) {
+		res.send("An error occured");
+		console.log("search req err ", e);
+	}
+})
 
 module.exports = Router;

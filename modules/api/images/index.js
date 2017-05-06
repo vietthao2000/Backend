@@ -9,7 +9,8 @@ Router.post('/', (req, res) => {
 		var imageInfo = {
 			name : req.body.name,
 			imageLink : req.body.imageLink,
-			description : req.body.description
+			description : req.body.description,
+			creator: req.body.creator
 		}
 
 		imagesController.addImage(imageInfo).then((result) => {res.send(result)});
@@ -23,12 +24,12 @@ Router.post('/', (req, res) => {
 Router.get('/', (req,res) => {
 	try {
 		if (req.query.id) {
-			interactionController.increaseViewCountById(req.query.id).then((result) => {});
+			// interactionController.increaseViewCountById(req.query.id).then((result) => {});
 			imagesController.fetchImageCollectionById(req.query.id).then((result) => {res.send(result)});
 		}
-		else if (req.query.name) {
-			interactionController.increaseViewCountByName(req.query.name).then((result) => {});
-			imagesController.fetchImageCollectionByName(req.query.name).then((result) => {res.send(result)});
+		else if (req.query.s) {
+			// interactionController.increaseViewCountByName(req.query.s).then((result) => {});
+			imagesController.searchImageCollection(req.query.s).then((result) => {res.send(result)});
 		}
 		else {
 			interactionController.increaseAllViewCount().then((result) => {});
@@ -104,10 +105,10 @@ Router.delete('/like', (req, res) => {
 
 Router.post('/comment', (req, res) => {
 	try {
-		if (req.body.id && req.body.comment && req.body.commentBy) 
+		if (req.body.id && req.body.content && req.body.commentBy) 
 			interactionController.addComment(
 				req.body.id, 
-				req.body.comment, 
+				req.body.content, 
 				req.body.commentBy
 			).then((result) => {res.send(result)});
 		else res.send("Not enough data");

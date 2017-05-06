@@ -2,6 +2,8 @@ const usersModel = require("./usersModel");
 const md5 = require('md5');
 const validator = require('validator');
 const unidecode = require('unidecode');
+const async = require('asyncawait/async');
+const await = require('asyncawait/await');
 
 var process = (work) => {
 	try {
@@ -54,31 +56,97 @@ var login = (data) => {
 	});
 }
 
-var search = (q) => {
-	return new Promise(cb => {
-		var result = [];
-		searchByUserName(normalize(q)).then(r => {
-			if (r) r.forEach(element => {result.push(element['_id'])});
-			searchByName(q).then(r => {
-				if (r) r.forEach(element => {if (result.indexOf(element['_id'])===-1) result.push(element['_id'])});
-				cb(result);
-			});
-		});
+var update = (data) => {
+	if (data.id && (data.email || data.avatar)) {
+		var newData = {}
+		if (data.email) newData.email = data.email;
+		if (data.avatar) newData.avatarLink = data.avatar;
+		return process(
+			usersModel.update({"_id": data.id}, newData)
+			.then((result) => {
+				// console.log("Processing");
+				if (result.ok!==1) {
+					// console.log("Error");
+					return "An error occured";
+				}
+				else {
+					if (result.nModified>0) {
+						usersModel.update(
+							{"_id": data.id}, 
+							{"updated": new Date().toISOString()}
+						).then(() => {});
+						// console.log("Updated");
+						return "Update successful";
+					} else {
+						// console.log("Not updated");
+						return "No update was made";
+					}
+				};
+		}));
+	}
+	else return new Promise (cb => {
+		cb("Not enough data");
 	});
 }
 
+var cookUsers = (raw, getOne) => {
+	var result = [];
+	raw.forEach(user => {
+		var cooked = {
+			id: user._id,
+			username: user.username,
+			email: user.email,
+			avatar: user.avatarLink,
+			createdDate: user.created,
+			updatedDate: user.updated
+		};
+		result.push(cooked);
+	});
+	if (getOne) result=result[0];
+	return result;
+}
+
+var search = async ((q) => {
+	var usernameList, emailList;
+	await(searchByUserName(q).then(usernames => {
+		usernameList = cookUsers(usernames, false);
+	}));
+
+	await(searchByEmail(q).then(emails => {
+		emailList = cookUsers(emails, false);
+	}));
+	var result = Object.assign(usernameList, emailList);
+	return result;
+})
+
 var searchByUserName = (q) => {
-	return process(usersModel.find({"username": {$regex: q, $options: "g"}}, "_id"))
-		.then(r => {return r});
+	return process(usersModel.find({"username": {$regex: normalize(q), $options: "g"}}));
 }
 
 var searchByName = (q) => {
-	return process(usersModel.find({"name": {$regex: q.replace(" ","|"), $options: "g"}}, "_id"))
-		.then(r => {return r});
+	return process(usersModel.find({"name": {$regex: q.replace(" ","|"), $options: "g"}}));
 }
+
+var searchByEmail = (q) => {
+	return process(usersModel.find({"email": {$regex: normalize(q), $options: "g"}}));
+}
+
+var searchByUserId = (q) => {
+	return process(usersModel.find({"_id": q}).then(raw => {return cookUsers(raw, true)}));
+}
+
+var getAllUsers = () => {
+	return process(usersModel.find({}).then(raw => {
+		return cookUsers(raw);
+	}));
+}
+
 
 module.exports = {
 	register,
 	login,
-	search
+	update,
+	search,
+	getAllUsers,
+	searchByUserId
 }

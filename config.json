@@ -1,4 +1,4 @@
 {
 	"port": 6969,
-	"connectionString": "mongodb://admin:psswd@localhost/tuvietthao"
+	"connectionString": "mongodb://admin:psswd@localhost/test"
 }

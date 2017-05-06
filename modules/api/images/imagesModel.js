@@ -3,11 +3,12 @@ const Schema = mongoose.Schema;
 const autoIncrement = require('mongoose-auto-increment');
 
 var imagesModel = new Schema({
-	id: {type: Number, required: true},
 	name: {type: String, default: ''},
 	imageLink: {type: String, default: ''},
 	description: {type: String},
 	views: {type: Number, default: 0},
+	created: {type: Date, default: Date.now()},
+	creator: {type: Number, required: true},
 	likes: [{
 		likeBy: {type: Number}
 	}],
