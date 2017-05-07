@@ -44,11 +44,8 @@ var login = (data) => {
 		}
 		if (validator.isEmail(data.login)) postData.email = data.login;
 		else postData.username = data.login;
-		return process(usersModel.findOne(postData, '_id')).then(result => {
-			//Handle login blah blah I'll do it later
-
-			//
-			return result;
+		return process(usersModel.find(postData).lean()).then(raw => {
+			return cookUsers(raw, true);
 		});
 	}
 	else return new Promise(cb => {

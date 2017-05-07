@@ -5,9 +5,18 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const config = require('./config.json');
+const session = require('express-session');
+
 mongoose.Promise = global.Promise;
 
 var app = express();
+
+app.use(session({
+	secret: "tellnobody",
+	maxAge: 1000*60*60*24*30,
+	resave: false,
+	saveUninitialized: true
+}));
 
 //set public folder public
 app.use(express.static(__dirname + '/public'));

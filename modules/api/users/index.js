@@ -1,6 +1,7 @@
 const express = require('express');
 const Router = express.Router();
 const usersController = require('./usersController');
+const session = require('express-session');
 
 Router.post('/register', (req, res) => {
 	try {
@@ -15,10 +16,34 @@ Router.post('/register', (req, res) => {
 Router.post('/login', (req, res) => {
 	try {
 		usersController.login(req.body)
-			.then(result => res.send(result));
+			.then(result => {
+				if (result) {
+					req.session.user = result;
+					res.send("Login success");
+				}
+				else {
+					res.send("Login failed");
+				}
+			});
 	} catch (e) {
 		res.send("An error occured");
 		console.log("receive req err ", e);
+	}
+});
+
+Router.get('/logout', (req, res) => {
+	try {
+		if (req.session.user) {
+			req.session.destroy();
+			res.redirect("/");
+		}
+		else {
+			res.send("Not logged in");
+		}
+	}
+	catch  (e) {
+		res.send("An error occured");
+		console.log("logout err ", e);	
 	}
 });
 
