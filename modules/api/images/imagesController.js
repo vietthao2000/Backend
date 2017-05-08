@@ -72,7 +72,7 @@ var cookImages = async ((raw, getOne) => {
 			})
 		);
 	}
-	console.log("Done");
+	// console.log("Done");
 	return result;
 })
 

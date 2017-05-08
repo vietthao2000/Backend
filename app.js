@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const config = require('./config.json');
 const session = require('express-session');
+const clientRouter = require('./client');
 
 mongoose.Promise = global.Promise;
 
@@ -18,9 +19,11 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+//app.use('/', clientRouter);
+
 //set public folder public
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json({ extended : true}));
+app.use(bodyParser.json({extended : true}));
 app.use(bodyParser.urlencoded({extended: true}));
 
 var connection = mongoose.connect(config.connectionString, (err) => {
@@ -31,7 +34,7 @@ var connection = mongoose.connect(config.connectionString, (err) => {
 autoIncrement.initialize(connection);
 
 const imagesRouter = require(__dirname + '/modules/api/images/');
-app.use('/api/images', imagesRouter);
+app.use('/api/image', imagesRouter);
 
 const usersRouter = require(__dirname + '/modules/api/users');
 app.use('/api/users', usersRouter);

@@ -13,7 +13,7 @@ Router.post('/register', (req, res) => {
 	};
 });
 
-Router.post('/login', (req, res) => {
+Router.post('/signin', (req, res) => {
 	try {
 		usersController.login(req.body)
 			.then(result => {
@@ -31,7 +31,7 @@ Router.post('/login', (req, res) => {
 	}
 });
 
-Router.get('/logout', (req, res) => {
+Router.delete('/signout', (req, res) => {
 	try {
 		if (req.session.user) {
 			req.session.destroy();
