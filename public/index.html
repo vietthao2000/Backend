@@ -8,68 +8,42 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="./assets/libs/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" href="./assets/css/style.css">
+		<link rel="stylesheet" href="./assets/libs/font-awesome/css/font-awesome.min.css">
+		<!-- <link rel="stylesheet" href="./assets/css/animate.css"> -->
 	</head>
 	<body>
-		<!-- <div id="root">
-			<input id="input" v-model="message"></input>	
-			<p>Your input: {{message}}</p>
-			<ul>
-				<li v-for="name in names" v-text="name"></li>
-			</ul>
-			<input type="text" v-model="newName"></input>
-			<button :class="{'is-loading': true}" @click="addName">Add Name</button>
-		</div>
-
-		<div id="tasks">
-			<ul>
-				<task>Test</task>
-				<task>Test1</task>
-			</ul>
-		</div> -->
-
-		<div class="container-fluid">
-			<!-- Navbar -->	
-			<nav class="navbar navbar-default" role="navigation">
-				<div class="container-fluid">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a class="navbar-brand" href="#">Gallery</a>
-					</div>
-			
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse navbar-ex1-collapse">
-						<ul class="nav navbar-nav">
-							<li class="active"><a href="#">Showcase</a></li>
-							<li><a href="#">Login</a></li>
-						</ul>
-						<form class="navbar-form navbar-left" role="search">
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Search">
-							</div>
-							<button type="submit" class="btn btn-default">Submit</button>
-						</form>
-						<ul class="nav navbar-nav navbar-right">
-							<li><a href="#">Link</a></li>
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Action</a></li>
-									<li><a href="#">Another action</a></li>
-									<li><a href="#">Something else here</a></li>
-									<li><a href="#">Separated link</a></li>
-								</ul>
-							</li>
-						</ul>
-					</div><!-- /.navbar-collapse -->
+		<!-- Navbar -->	
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Gallery</a>
 				</div>
-			</nav>
+		
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Showcase</a></li>
+						<li><a href="/login.html">Login</a></li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Search">
+						</div>
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
+				</div><!-- /.navbar-collapse -->
+			</div>
+		</nav>
+		<div class="container">
 
 			<!-- Gallery header -->
 			<div class="page-header text-center">
@@ -78,16 +52,65 @@
 
 			<!-- Gallery -->
 			<div class="row" id="thumbnails">
-				<div class="col-xs-3" v-for="image in thumbnails">
+				<div class="col-md-3" v-for="image in thumbnails">
+
+					<!-- Thumbnail -->
 					<div class="thumbnail">
-						<img :src="image.imageUrl" :alt="image.content">
+						<!-- Overlay container -->
+						<div class="overlayed">
+							<div class="color-overlay overlay img-responsive img-rounded"></div>
+							<img class="img-responsive img-rounded" :src="image.imageUrl" :alt="image.content">
+
+							<!-- Overlay icons -->
+							<div class="row overlay text-center">
+								<div class="col-sm-4">
+									<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+									<p v-text="image.view"></p>
+								</div>
+								<div class="col-sm-4">
+									<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+									<p v-text="image.date"></p>
+								</div>
+								<div class="col-sm-4">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									<p v-text="image.plus"></p>
+								</div>
+							</div>
+
+							<!-- Overlay plus button -->
+							<div class="row overlay plus">
+								<div class="col-xs-12">
+									<span class="fa fa-plus-circle fa-2x" aria-hidden="true" @click="addPlus"></span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Caption -->
 						<div class="caption">
 							<div class="row">
-								<div class="col-xs-3">
-									<img class="img img-responsive img-circle" :src="image.posterAvatar"></img>
+								<div class="col-sm-4" style="margin-top: 10px">
+									<img class="img-responsive img-circle" :src="image.posterAvatar"></img>
 								</div>
-								<div class="col-xs-9">
-									<h3 v-text="image.posterName"></h3>
+								<div class="col-sm-8">
+									<div class="row">
+										<div class="col-sm-12">
+											<h4 v-text="image.posterName"></h4>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-12">
+											<h4><small v-text="image.posterTitle"></small></h4>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Content -->
+						<div class="caption">
+							<div class="row">
+								<div class="col-sm-12">
+									<p v-text="image.content"></p>
 								</div>
 							</div>
 						</div>
@@ -96,9 +119,9 @@
 			</div>
 		</div>
 	
-		<script src="./assets/js/jquery.min.js"></script>
-		<script src="./assets/js/bootstrap.min.js"></script>
-		<script src="./assets/js/vue.js"></script>
+		<script src="./assets/libs/jquery/jquery.min.js"></script>
+		<script src="./assets/libs/bootstrap/js/bootstrap.min.js"></script>
+		<script src="./assets/libs/vue/vue.js"></script>
 		<script src="./assets/js/main.js"></script>
 	</body>
 </html>
