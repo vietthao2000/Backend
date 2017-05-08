@@ -1,57 +1,33 @@
-// v-model="message" 
-// v-on:click="addName" v-on:keyUp="addName"
-// v-for="name in names"
-// v-text
-// :title="Hover me"
-// :class="className"
-
-// new Vue({
-// 	el: "#root",
-// 	data: {
-// 		message: "test",
-// 		newName: "",
-// 		names: ["Thao","Tu","Viet"]
-// 	},
-// 	methods: {
-// 		addName() {
-// 			this.names.push(this.newName);
-// 			this.newName = "";
-// 		}
-// 	},
-// 	mounted() {console.log("Mounted")}
-// });		
-
-// Vue.component('task', {
-// 	template: "<li><b><slot></slot></b><li>",
-// 	data() {
-// 		return {
-// 			message: "It works"
-// 		}
-// 	}
-// });
-
-// new Vue({
-// 	el: "#tasks",
-// 	data: {
-// 		ts: ["Work1", "Work2", "Work3"]
-// 	}
-// });
-
-// var app = new Vue({
-// 	el: "#test",
-// 	data: {
-// 		message: "It works"
-// 	}
-// });
-
 var app1 = new Vue({
 	el: "#thumbnails",
 	data: {
-		thumbnails: [],
+		thumbnails: []
 	},
 	mounted() {
 		fetch("http://localhost:6969/api/image",{'mode': 'no-cors'})
 			.then(response => {return response.json()})
-				.then(json => {this.thumbnails=json;})
+				.then(json => {
+					json.forEach((image, index) => {
+						let date = new Date(image.date);
+						let year = date.getFullYear();
+						let month = date.getMonth()+1;
+						let dt = date.getDate();
+
+						if (dt < 10) {
+						  dt = '0' + dt;
+						}
+						if (month < 10) {
+						  month = '0' + month;
+						}
+						let final =dt + "/" + month + "/" + year;
+						json[index].date = final;
+					});
+					this.thumbnails=json;
+				})
+	},
+	methods: {
+		addPlus() {
+			alert();
+		}
 	}
 })
