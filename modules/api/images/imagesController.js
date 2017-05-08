@@ -6,21 +6,13 @@ const await = require('asyncawait/await');
 var process = (work) => {
 	try {
 		return work.then((status) => {
-			if (status.ok && status.n && status.nModified) {
-				if (status.ok) return `Query success, ${status.n} row(s) found, ${status.nModified} row(s) affected`;
-				else return `Query failed`;      
-			}
 			return status;
 		});
 	}
 	catch (e) {
-		// console.log(e);
-		return processError();
+		console.log(e);
+		return null;
 	}
-}
-
-var processError = () => {
-	return new Promise(cb => cb("An error occured"));
 }
 
 var cookImages = async ((raw, getOne) => {
@@ -28,32 +20,34 @@ var cookImages = async ((raw, getOne) => {
 	var ids = [];
 	raw.forEach(image => {
 		await (
-			process(usersModel.findOne({_id: image.creator}))
-			.then(user => {
-				var cooked = {
-					id: image.id,
-					imageUrl: image.imageLink,
-					view: image.views,
-					date: image.created,
-					plus: image.likes.length,
-					posterAvatar: user.avatarLink,
-					posterName: user.name,
-					posterTitle: image.description,
-					content: image.name,
-				};
+			process(
+				usersModel.findOne({_id: image.creator}).populate('users')
+				.then(user => {
+					var cooked = {
+						id: image.id,
+						imageUrl: image.imageLink,
+						view: image.views,
+						date: image.created,
+						plus: image.likes.length,
+						posterAvatar: user.avatarLink,
+						posterName: user.name,
+						content: image.description,
+						posterTitle: image.name,
+					};
 
-				if (getOne) {
-					cooked.comments = image.comments;
-					image.comments.forEach(comment => {
-						if (ids.indexOf(comment.commentBy)===-1) {
-							ids.push(comment.commentBy);
-							// console.log("Pushing");
-						}
-					});
-				}
-				result.push(cooked);
-				// console.log("Cooking");
-			})
+					if (getOne) {
+						cooked.comments = image.comments;
+						image.comments.forEach(comment => {
+							if (ids.indexOf(comment.commentBy)===-1) {
+								ids.push(comment.commentBy);
+								// console.log("Pushing");
+							}
+						});
+					}
+					result.push(cooked);
+					// console.log("Cooking");
+				})
+			)
 		);
 	});
 

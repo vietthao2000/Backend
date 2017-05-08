@@ -8,10 +8,6 @@ const await = require('asyncawait/await');
 var process = (work) => {
 	try {
 		return work.then((status) => {
-			if (status.ok && status.n && status.nModified) {
-				if (status.ok) return `Query success, ${status.n} row(s) found, ${status.nModified} row(s) affected`;
-				else return `Query failed`;      
-			}
 			return status;
 		}).catch((err) => {
 			return err;
@@ -31,7 +27,8 @@ var normalize = (st) => {
 
 var register = (data) => {
 	if (data.password) data.password = md5(data.password);
-	return process(usersModel.create(data)).then(result => {
+	return process(usersModel.create(data))
+	.then(result => {
 		if (result.errors) return result;
 		else return {_id : result._id};
 	});
@@ -44,7 +41,8 @@ var login = (data) => {
 		}
 		if (validator.isEmail(data.login)) postData.email = data.login;
 		else postData.username = data.login;
-		return process(usersModel.find(postData).lean()).then(raw => {
+		return process(usersModel.find(postData).lean())
+		.then(raw => {
 			return cookUsers(raw, true);
 		});
 	}

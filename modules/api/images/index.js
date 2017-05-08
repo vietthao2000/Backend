@@ -13,7 +13,9 @@ Router.post('/', (req, res) => {
 			creator: req.body.creator
 		}
 
-		imagesController.addImage(imageInfo).then((result) => {res.send(result)});
+		imagesController
+			.addImage(imageInfo)
+				.then((result) => {res.send(result)});
 	} catch (e) {
 		res.send("An error occured");
 		console.log(e);
@@ -25,15 +27,24 @@ Router.get('/', (req,res) => {
 	try {
 		if (req.query.id) {
 			// interactionController.increaseViewCountById(req.query.id).then((result) => {});
-			imagesController.fetchImageCollectionById(req.query.id).then((result) => {res.send(result)});
+			imagesController
+				.fetchImageCollectionById(req.query.id)
+					.then((result) => {res.send(result);});
 		}
 		else if (req.query.s) {
 			// interactionController.increaseViewCountByName(req.query.s).then((result) => {});
-			imagesController.searchImageCollection(req.query.s).then((result) => {res.send(result)});
+			imagesController
+				.searchImageCollection(req.query.s)
+					.then((result) => {res.send(result);});
 		}
 		else {
-			interactionController.increaseAllViewCount().then((result) => {});
-			imagesController.fetchImageCollection().then((result) => {res.send(result)});
+			interactionController
+				.increaseAllViewCount()
+					.then((result) => {});
+
+			imagesController
+				.fetchImageCollection()
+					.then((result) => {res.send(result);});
 		}
 	} catch (e) {
 		res.send("An error occured");
@@ -50,7 +61,9 @@ Router.put('/', (req, res) => {
 				description: req.body.description
 			};
 			
-			imagesController.updateImageCollectionById(req.body.id, newData).then((result) => {res.send(result)});
+			imagesController
+				.updateImageCollectionById(req.body.id, newData)
+					.then((result) => {res.send(result)});
 		}
 		else if (req.body.name) {
 			var newData = {
@@ -59,7 +72,9 @@ Router.put('/', (req, res) => {
 				description: req.body.description
 			};
 			
-			imagesController.updateImageCollectionByName(req.body.name, newData).then((result) => {res.send(result)});	
+			imagesController
+				.updateImageCollectionByName(req.body.name, newData)
+					.then((result) => {res.send(result)});	
 		}
 		else res.send("Not enough data");
 	} catch (e) {
@@ -71,7 +86,9 @@ Router.put('/', (req, res) => {
 Router.delete('/', (req, res) => {
 	try {
 		if (req.body.id)
-			imagesController.deleteImageCollectionById(req.body.id).then((result) => {res.send(result)});
+			imagesController
+				.deleteImageCollectionById(req.body.id)
+					.then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch (e) {
 		res.send("An error occured");
@@ -82,8 +99,9 @@ Router.delete('/', (req, res) => {
 Router.post('/like', (req, res) => {
 	try {
 		if (req.body.id && req.body.likeBy)
-			interactionController.addLike(req.body.id, req.body.likeBy)
-			.then((result) => {res.send(result)});
+			interactionController
+				.addLike(req.body.id, req.body.likeBy)
+					.then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch(e) {
 		res.send("An error occured");
@@ -94,8 +112,9 @@ Router.post('/like', (req, res) => {
 Router.delete('/like', (req, res) => {
 	try {
 		if (req.body.id && req.body.likeBy) 
-			interactionController.removeLike(req.body.id, req.body.likeBy)
-				.then((result) => {res.send(result)});
+			interactionController
+				.removeLike(req.body.id, req.body.likeBy)
+					.then((result) => {res.send(result)});
 		else res.send('Not enough data');
 	} catch (e) {
 		res.send("An error occured");
@@ -120,8 +139,10 @@ Router.post('/comment', (req, res) => {
 
 Router.delete('/comment', (req, res) => {
 	try {
-		if (req.body.id && req.body.commentHash) interactionController.removeComment(req.body.id, req.body.commentHash)
-			.then((result) => {res.send(result)});
+		if (req.body.id && req.body.commentHash) 
+			interactionController
+				.removeComment(req.body.id, req.body.commentHash)
+					.then((result) => {res.send(result)});
 		else res.send("Not enough data");
 	} catch(e) {
 		res.send("An error occured");
