@@ -42,29 +42,44 @@
 			</div>
 		</nav>
 		
-		<div class="container" style="padding-top: 40px">
+		<div class="container" style="padding-top: 20px">
 			<div class="row">
-				<div class="col-xs-12">
-					<form action="./api/users/signin" method="POST" role="form" class="form-signin">
-						<h2 class="text-center">Login</h2>
-					
+				<div class="col-xs-4">
+					<form action="./api/users/signup" method="POST" role="form">
+						<legend>Register</legend>
+						
 						<div class="form-group">
-							<label for="">Username or email</label>
-							<input type="text" class="form-control" name="login" placeholder="something@domain.com">
+							<label for="">Name</label>
+							<input type="text" class="form-control" name="name" placeholder="Your name">
+						</div>
+
+						<div class="form-group">
+							<label for="">Username</label>
+							<input type="text" class="form-control" name="username" placeholder="yourusername">
+						</div>
+
+						<div class="form-group">
+							<label for="">Email</label>
+							<input type="text" class="form-control" name="email" placeholder="something@domain.com">
+						</div>
+
+						<div class="form-group">
+							<label for="">Confirm email</label>
+							<input type="text" class="form-control" placeholder="something@domain.com">
 						</div>
 					
 						<div class="form-group">
 							<label for="">Password</label>
-							<input type="password" class="form-control" name="password" placeholder="******">
+							<input type="password" class="form-control" name="password" placeholder="***********">
 						</div>	
 					
-						<button type="submit" class="btn btn-lg btn-primary btn-block center-block">Submit</button>
+						<button type="submit" class="btn btn-primary center-block">Register</button>
 					</form>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-12 text-center">
-					Don't have an account? Register <a href="/register">here</a>
+				<div class="col-xs-4 text-center">
+					<h4>Already have an account? <a href="/login">Login</a><h4>
 				</div>
 			</div>
 		</div>

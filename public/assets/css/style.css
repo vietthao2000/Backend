@@ -1,13 +1,13 @@
 .overlay {
-    position: absolute !important;
-    bottom: 0px !important;
-    color: white;
-    margin-left: 0;
-    margin-right: 0;
-    left: 0;
-    right: 0;
-    text-shadow: 0 2px 2px rgba(0,0,0,.6);
-    display: none;
+		position: absolute !important;
+		bottom: 0px !important;
+		color: white;
+		margin-left: 0;
+		margin-right: 0;
+		left: 0;
+		right: 0;
+		text-shadow: 0 2px 2px rgba(0,0,0,.6);
+		display: none;
 }
 
 .overlayed {
@@ -29,4 +29,18 @@
 
 .overlayed:hover .overlay {
 	display: block;
+}
+
+.form-signin {
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+}
+
+#small-avatar {
+	height: auto;
+	width: auto;
+	max-height: 40px;
+	max-width: 40px;
+	margin-top: 5px;
 }

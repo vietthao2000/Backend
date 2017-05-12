@@ -4,7 +4,7 @@ var app1 = new Vue({
 		thumbnails: []
 	},
 	mounted() {
-		fetch("http://localhost:6969/api/image",{'mode': 'no-cors'})
+		fetch("/api/images",{'mode': 'no-cors'})
 			.then(response => {return response.json()})
 				.then(json => {
 					json.forEach((image, index) => {
@@ -30,4 +30,22 @@ var app1 = new Vue({
 			alert();
 		}
 	}
-})
+});
+
+var app2 = new Vue({
+	el: "#userbar",
+	data: {
+		user: false
+	},
+	mounted() {
+		fetch("/api/users/me",{
+			'credentials': 'include'
+		})
+		.then(response => {
+			return response.json()
+		}).then(json => {
+			this.user = json.username?json:false;
+			console.log(JSON.stringify(json));
+		});
+	}
+});
