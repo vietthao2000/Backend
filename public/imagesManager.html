@@ -10,6 +10,7 @@
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="./assets/libs/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="./assets/css/style.css">
+		<link rel="stylesheet" href="./assets/libs/font-awesome/css/font-awesome.min.css">
 	</head>
 	<body>
 		<!-- Navbar -->	
@@ -30,11 +31,11 @@
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<!-- Navigation tabs -->
 					<ul class="nav navbar-nav">
-						<li><a href="/">Showcase</a></li>
+						<li ><a href="/">Showcase</a></li>
 						<li><a href="/upload" v-if="!(!user || user.guest)">Upload</a></li>
-						<li><a href="/imagesManager" v-if="!(!user || user.guest)">Images Manager</a></li>
+						<li class="active"><a href="/imagesManager" v-if="!(!user || user.guest)">Images Manager</a></li>
 						<li><a href="/login" v-if="!user || user.guest">Login</a></li>
-						<li class="active"><a href="/register" v-if="!user || user.guest">Register</a></li>
+						<li><a href="/register" v-if="!user || user.guest">Register</a></li>
 					</ul>
 
 					<!-- Search form -->
@@ -66,44 +67,50 @@
 			</div>
 		</nav>
 		
-		<div class="container" style="padding-top: 20px">
+		<div class="container-fluid" id="image-form">
 			<div class="row">
-				<div class="col-xs-4">
-					<form action="./api/users/signup" method="POST" role="form">
-						<legend>Register</legend>
-						
-						<div class="form-group">
-							<label for="">Name</label>
-							<input type="text" class="form-control" name="name" placeholder="Your name">
+				<div class="col-xs-5">
+					<div :class="submitClass" v-if="submitted">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<strong>Status: </strong> {{submitStatus}}
+						<div v-if="errors">
+							<h6 v-for="error in errors" v-text="error.message"></h6>
 						</div>
-
-						<div class="form-group">
-							<label for="">Username</label>
-							<input type="text" class="form-control" name="username" placeholder="yourusername">
-						</div>
-
-						<div class="form-group">
-							<label for="">Email</label>
-							<input type="text" class="form-control" name="email" placeholder="something@domain.com">
-						</div>
-
-						<div class="form-group">
-							<label for="">Confirm email</label>
-							<input type="text" class="form-control" placeholder="something@domain.com">
-						</div>
-					
-						<div class="form-group">
-							<label for="">Password</label>
-							<input type="password" class="form-control" name="password" placeholder="***********">
-						</div>	
-					
-						<button type="submit" class="btn btn-primary center-block">Register</button>
-					</form>
+					</div>
 				</div>
 			</div>
+			<!-- Images table -->
 			<div class="row">
-				<div class="col-xs-4 text-center">
-					<h4>Already have an account? <a href="/login">Login</a><h4>
+				<div class="col-md-12">
+					<div class="panel panel-primary">
+						<!-- Default panel contents -->
+						<div class="panel-heading"><i class="fa fa-folder-open fa-1x" aria-hidden="true"></i> Images list</div>
+					
+						<!-- Table -->
+						<table class="table">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Url</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="item in collection" :id="item.id">
+									<td v-text="item.id"></td>
+									<td v-text="item.posterTitle"></td>
+									<td v-text="item.content"></td>
+									<td v-text="item.imageUrl"></td>
+									<td>
+										<!-- <button type="button" class="btn btn-warning">Edit</button> -->
+										<button type="button" class="btn btn-danger" @click="del(item.id)">Delete</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -112,5 +119,6 @@
 		<script src="./assets/libs/bootstrap/js/bootstrap.min.js"></script>
 		<script src="./assets/libs/vue/vue.js"></script>
 		<script src="./assets/js/userbar.js"></script>
+		<script src="./assets/js/imagesManager.js"></script>
 	</body>
 </html>

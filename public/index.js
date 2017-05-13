@@ -53,4 +53,19 @@ router.get('/register', (req, res) => {
 	}
 });
 
+router.get('/imagesManager', (req, res) => {
+	try {
+		if (req.session.user) {
+			res.sendFile(__dirname + "/imagesManager.html");
+		}
+		else {
+			res.redirect('/');
+		}
+	}
+	catch (e) {
+		console.log(e);
+		res.send("An error occured");
+	}
+});
+
 module.exports = router;

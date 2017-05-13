@@ -94,7 +94,8 @@ var cookUsers = (raw, getOne) => {
 			avatar: user.avatarLink,
 			createdDate: user.created,
 			updatedDate: user.updated,
-			role: user.role
+			role: user.role,
+			name: user.name
 		};
 		result.push(cooked);
 	});

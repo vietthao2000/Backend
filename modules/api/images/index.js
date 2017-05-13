@@ -2,36 +2,22 @@ const express = require('express');
 const Router = express.Router();
 const imagesController = require('./imagesController');
 const interactionController = require('./interactionController');
-const rolesModel = require('../users/rolesModel');
+const permission = require('../permissions/');
+// const rolesModel = require('../users/rolesModel');
 // const session = require('express-session');
 
+Router.use(permission.assignPermission);
+
 var verifyPermission = (req, res, next, permission) => {
-	if (req.session.permissions[permission]===1) {
+	if (req.permissions.images[permission]===1) {
 		next();
 	}
 	else {
-		res.send({err:"No permission"});
-	}
-};
-
-var assignPermission = (req, res, next) => {
-	if (req.session.user) {
-		rolesModel.findOne({"role": req.session.user.role})
-		.then(result => {
-			req.session.permissions = result.permissions.images;
-			next();
-		});
-	}
-	else {
-		rolesModel.findOne({"role": "guest"})
-		.then(result => {
-			req.session.permissions = result.permissions.images;
-			next();
+		res.send({
+			errors: {"permission": {"message": "No permission"}}
 		});
 	}
 };
-
-Router.use(assignPermission);
 
 Router.post('/', (req, res, next) => {verifyPermission(req, res, next, 'write')},
 	(req, res) => {
@@ -118,6 +104,7 @@ Router.put('/', (req, res, next) => {verifyPermission(req, res, next, 'update')}
 
 Router.delete('/', (req, res, next) => {verifyPermission(req, res, next, 'delete')},
 	(req, res) => {
+		console.log(req.session.user);
 		try {
 			if (req.body.id)
 				imagesController
@@ -174,7 +161,7 @@ Router.post('/comment', (req, res, next) => {verifyPermission(req, res, next, 'w
 		}
 	});
 
-Router.delete('/comment', (req, res, next) => {verifyPermission(req, res, next, 'read')},
+Router.delete('/comment', (req, res, next) => {verifyPermission(req, res, next, 'write')},
 	(req, res) => {
 		try {
 			if (req.body.id && req.body.commentHash) 

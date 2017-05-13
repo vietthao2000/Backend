@@ -33,27 +33,6 @@ var connection = mongoose.connect(config.connectionString, (err) => {
 
 autoIncrement.initialize(connection);
 
-// app.get('/testmiddleware', (req, res, next) => {
-// 	console.log('testmiddleware');
-// 	req.test = 'testmiddleware';
-// 	next();
-// });
-
-// app.get('/testmiddleware', (req, res, next) => {
-// 	console.log(req.test);
-// 	res.send('middleware response');
-// });
-
-// app.get('/testcookie', (req, res) => {
-// 	res.cookie('test', '123');
-// 	res.send("test");
-// });
-
-// app.get('/clear', (req, res) => {
-// 	res.clearCookie('testcookie');
-// 	res.send('test');
-// });
-
 app.use('/', clientRouter);
 
 const imagesRouter = require(__dirname + '/modules/api/images/');

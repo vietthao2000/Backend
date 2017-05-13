@@ -7,10 +7,13 @@ var process = (work) => {
 	try {
 		return work.then((status) => {
 			return status;
+		}).catch((err) => {
+			return err;
+			console.log("validation ",err);
 		});
 	}
 	catch (e) {
-		console.log(e);
+		console.log("process err ", e);
 		return null;
 	}
 }
