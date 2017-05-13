@@ -16,7 +16,7 @@ var process = (work) => {
 	}
 	catch (e) {
 		console.log("process err ", e);
-		return processError();
+		return null;
 	}
 }
 
@@ -47,7 +47,7 @@ var login = (data) => {
 		});
 	}
 	else return new Promise(cb => {
-		cb("Not enough data");
+		cb(null);
 	});
 }
 
@@ -93,7 +93,8 @@ var cookUsers = (raw, getOne) => {
 			email: user.email,
 			avatar: user.avatarLink,
 			createdDate: user.created,
-			updatedDate: user.updated
+			updatedDate: user.updated,
+			role: user.role
 		};
 		result.push(cooked);
 	});

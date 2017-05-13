@@ -2,6 +2,36 @@ const express = require('express');
 const Router = express.Router();
 const usersController = require('./usersController');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const rolesModel = require('./rolesModel');
+
+var verifyPermission = (req, res, next, permission) => {
+	if (req.session.permissions[permission]===1) {
+		next();
+	}
+	else {
+		res.send({err:"No permission"});
+	}
+};
+
+var assignPermission = (req, res, next) => {
+	if (req.session.user) {
+		rolesModel.findOne({"role": req.session.user.role})
+		.then(result => {
+			req.session.permissions = result.permissions.users;
+			next();
+		});
+	}
+	else {
+		rolesModel.findOne({"role": "guest"})
+		.then(result => {
+			req.session.permissions = result.permissions.users;
+			next();
+		});
+	}
+};
+
+Router.use(assignPermission);
 
 Router.post('/register', (req, res) => {
 	try {
@@ -19,7 +49,7 @@ Router.post('/signin', (req, res) => {
 			.then(result => {
 				if (result) {
 					req.session.user = result;
-					res.send("Login success");
+					res.redirect('/');
 				}
 				else {
 					res.send("Login failed");
@@ -31,7 +61,7 @@ Router.post('/signin', (req, res) => {
 	}
 });
 
-Router.delete('/signout', (req, res) => {
+Router.get('/signout', (req, res) => {
 	try {
 		if (req.session.user) {
 			req.session.destroy();
@@ -74,5 +104,14 @@ Router.put('/', (req, res) => {
 		console.log("search req err ", e);
 	}
 })
+
+Router.get('/me', (req, res) => {
+	try {	
+		res.send(req.session.user || {username: "Guest", avatar: "/assets/images/male.jpg", guest: true})
+	} catch (e) {
+		res.send("An error occured");
+		console.log("get session err ", e);
+	}
+});
 
 module.exports = Router;

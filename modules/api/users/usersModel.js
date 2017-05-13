@@ -47,6 +47,7 @@ var usersModel = new Schema({
 	friends: [{
 		uid: {type: Number}
 	}],
+	role: {type: String, default: "user", ref: "role"}
 });
 
 usersModel.plugin(autoIncrement.plugin, {

@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const config = require('./config.json');
 const session = require('express-session');
-const clientRouter = require('./client');
+// const clientRouter = require('./client');
+const clientRouter = require('./public');
+const cookieParser = require('cookie-parser');
 
 mongoose.Promise = global.Promise;
 
@@ -19,12 +21,10 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-//app.use('/', clientRouter);
-
 //set public folder public
-app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json({extended : true}));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 var connection = mongoose.connect(config.connectionString, (err) => {
 	if (err) console.log(err)
@@ -33,8 +33,31 @@ var connection = mongoose.connect(config.connectionString, (err) => {
 
 autoIncrement.initialize(connection);
 
+// app.get('/testmiddleware', (req, res, next) => {
+// 	console.log('testmiddleware');
+// 	req.test = 'testmiddleware';
+// 	next();
+// });
+
+// app.get('/testmiddleware', (req, res, next) => {
+// 	console.log(req.test);
+// 	res.send('middleware response');
+// });
+
+// app.get('/testcookie', (req, res) => {
+// 	res.cookie('test', '123');
+// 	res.send("test");
+// });
+
+// app.get('/clear', (req, res) => {
+// 	res.clearCookie('testcookie');
+// 	res.send('test');
+// });
+
+app.use('/', clientRouter);
+
 const imagesRouter = require(__dirname + '/modules/api/images/');
-app.use('/api/image', imagesRouter);
+app.use('/api/images', imagesRouter);
 
 const usersRouter = require(__dirname + '/modules/api/users');
 app.use('/api/users', usersRouter);
