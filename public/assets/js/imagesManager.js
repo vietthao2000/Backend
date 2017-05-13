@@ -1,26 +1,32 @@
 var app = new Vue({
 	el: "#image-form",
 	data: {
-		name: "",
-		imageLink: "",
-		description: "",
+		collection: [],
 		submitted: 0,
 		submitStatus: "",
 		submitClass: "alert alert-success",
 		errors: {}
 	},
+	mounted() {
+		fetch("/api/images",{'mode': 'no-cors'})
+			.then(response => {return response.json()})
+				.then(json => {
+					this.collection=json;
+				})
+	},
 	methods: {
-		submit() {
-			fetch('/api/images/',{
-				method: 'POST',
+		update() {
+
+		},
+		del(id) {
+			fetch("/api/images", {
+				credentials: 'include',
+				method: 'delete',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				credentials: 'include',
 				body: JSON.stringify({
-					name: this.name,
-					imageLink: this.imageLink,
-					description: this.description
+					id: id
 				})
 			})
 			.then(response => {
@@ -35,14 +41,19 @@ var app = new Vue({
 				}
 				else { 
 					this.submitClass = "alert alert-success fadeIn";
-					this.submitStatus = "Success, image id: "+json._id;
+					this.submitStatus = "Success";
 					this.submitted=1;
 					this.errors = "";
 					this.name = "";
 					this.imageLink = "";
 					this.description = "";
+					this.collection.forEach((element, index) => {
+						if (element.id===id) {
+							this.collection.splice(index, 1);
+						}
+					});
 				}
-			});
+			});;
 		}
 	}
-})
+});
