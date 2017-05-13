@@ -69,7 +69,7 @@ Router.get('/signout', (req, res) => {
 	}
 }, permission.assignPermission);
 
-Router.get('/', verifyPermission(req, res, next, 'read')},
+Router.get('/', (req, res, next) => {verifyPermission(req, res, next, 'write')},
 	(req, res) => {
 		try {
 			let b = req.query;
@@ -88,7 +88,7 @@ Router.get('/', verifyPermission(req, res, next, 'read')},
 		}
 	});
 
-Router.put('/', verifyPermission(req, res, next, 'update')},
+Router.put('/', (req, res, next) => {verifyPermission(req, res, next, 'write')},
 	(req, res) => {
 		try {
 			let b = req.body;
@@ -97,7 +97,7 @@ Router.put('/', verifyPermission(req, res, next, 'update')},
 			res.send("An error occured");
 			console.log("search req err ", e);
 		}
-	})
+	});
 
 Router.get('/me', (req, res) => {
 	try {	
